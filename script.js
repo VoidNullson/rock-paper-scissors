@@ -1,8 +1,20 @@
 let totalGames = 0;
 let gameLose = 0;
 let gameWin = 0;
+const btns = document.querySelectorAll('button');
+const games = document.querySelector('#games');
+const wins = document.querySelector('#wins');
+const loses = document.querySelector('#loses');
 
-function computerPlay () {
+btns.forEach(btn => btn.addEventListener('click', newRound));
+
+function newRound(e){
+    let computer = computerPlay();
+    let user= e.target.id;
+    compare(user, computer);
+}
+
+function computerPlay () {         
         let choice = (Math.round(Math.random()*10)%3);
         let hand = "";
         switch(choice){
@@ -21,18 +33,19 @@ function computerPlay () {
     }
 
 function newGame(){
-    // let gameLose = 0;
+    // let gameLose = 0;        //redundant variables
     // let gameWin = 0;
     // let totalGames = 0;
         
     while(totalGames != 5){
         let computer = computerPlay();
-        let user = prompt("'Rock, paper, SCISSORS!' \n \n time slows down, \n you calculate what the computer may choose next, \n \n Thats it...:")
-        // let result = newRound(user.toLowerCase() , computer) ;
+        // let user = prompt("'Rock, paper, SCISSORS!' \n \n time slows down, \n you calculate what the computer may choose next, \n \n Thats it...:")
         
-        compare(user, computer);
+        // newRound(user.toLowerCase() , computer) ;    //redundant function call
+        
+        compare(user.toLowerCase(), computer);     
 
-        totalGames++;
+        // totalGames++;
         console.log(totalGames);
         console.log(gameWin);
         console.log(gameLose);
@@ -46,23 +59,24 @@ function lose() {
 function win() {
     gameWin++;
 }
-    
-function newRound (user, computer){
-    const result = compare(computer , user); //should forward gameWin++
-    return result;
-}
+
 
 function compare(computer, user){
+
+        totalGames++;
+        games.textContent = totalGames;
     if (computer === user){
         console.log(`Draw! Both are ${user}.`);
         return;
     }else if ((computer == 'rock' && user == 'paper') || (computer =='paper' && user == 'scissors') || (computer == 'scissors' && user == 'rock')){
         console.log(`Nice! You beat ${computer} with ${user}`);
         win();
+        wins.textContent= gameWin;
         return; 
     } else {
         console.log(`Aw, fuck! They beat your ${user} with ${computer}`);
         lose();
+        loses.textContent= gameLose;
         return;
     }
 
